@@ -13,6 +13,7 @@ final class TimestampAdjuster {
 
 	/**
 	 * Launch the application.
+	 * 
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(() -> new TimestampAdjuster());
@@ -27,6 +28,7 @@ final class TimestampAdjuster {
 
 	/**
 	 * Initialize the contents of the frame.
+	 * @wbp.parser.entryPoint
 	 */
 	private void initialize() {
 		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(ICON_PATH));
