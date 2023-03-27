@@ -5,7 +5,7 @@ import java.awt.Toolkit;
 import javax.swing.JFrame;
 
 final class TimestampAdjuster {
-	
+
 	private static final String ICON_PATH = "src/resources/timestamp.png";
 	private static final String TITLE = "Timestamp Adjuster 1.0";
 
