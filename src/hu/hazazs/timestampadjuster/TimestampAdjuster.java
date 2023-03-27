@@ -1,34 +1,27 @@
 package hu.hazazs.timestampadjuster;
 
 import java.awt.EventQueue;
+import java.awt.Toolkit;
 import javax.swing.JFrame;
 
 final class TimestampAdjuster {
 	
-	// TODO fix window size, icon
+	private static final String ICON_PATH = "src/resources/timestamp.png";
+	private static final String TITLE = "Timestamp Adjuster 1.0";
 
-	private JFrame frame;
+	private final JFrame frame = new JFrame();
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					new TimestampAdjuster();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+		EventQueue.invokeLater(() -> new TimestampAdjuster());
 	}
 
 	/**
 	 * Create the application.
 	 */
-	public TimestampAdjuster() {
+	private TimestampAdjuster() {
 		initialize();
 	}
 
@@ -36,7 +29,8 @@ final class TimestampAdjuster {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frame = new JFrame();
+		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(ICON_PATH));
+		frame.setTitle(TITLE);
 		frame.setBounds(100, 100, 450, 300);
 		frame.setResizable(false);
 		frame.setVisible(true);
