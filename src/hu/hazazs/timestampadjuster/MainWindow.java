@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Toolkit;
+import java.util.concurrent.Executors;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -57,7 +58,10 @@ final class MainWindow {
 		frame.getContentPane().add(textFieldSecond);
 
 		adjustButton = Button.get("ADJUST", 105, 11, 88, 82, font);
-		adjustButton.addActionListener(event -> frame.getContentPane().requestFocusInWindow());
+		adjustButton.addActionListener(event -> {
+			frame.getContentPane().requestFocusInWindow();
+			adjust();
+		});
 		frame.getContentPane().add(adjustButton);
 
 		errorLabel = Label.get(15, 104, 414, 14, font);
@@ -69,6 +73,10 @@ final class MainWindow {
 		frame.getContentPane().add(textArea);
 
 		frame.getContentPane().requestFocusInWindow();
+	}
+
+	private void adjust() {
+		Executors.newSingleThreadExecutor().execute(TimestampAdjuster.get(this));
 	}
 
 }
