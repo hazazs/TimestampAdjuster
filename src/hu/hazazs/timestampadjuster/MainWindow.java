@@ -30,6 +30,26 @@ final class MainWindow {
 	private JLabel errorLabel;
 	private JTextArea textArea;
 
+	JTextField getTextFieldHour() {
+		return textFieldHour;
+	}
+
+	JTextField getTextFieldMinute() {
+		return textFieldMinute;
+	}
+
+	JTextField getTextFieldSecond() {
+		return textFieldSecond;
+	}
+
+	JLabel getErrorLabel() {
+		return errorLabel;
+	}
+
+	JTextArea getTextArea() {
+		return textArea;
+	}
+
 	public static void main(String[] args) {
 		EventQueue.invokeLater(() -> new MainWindow().run());
 	}
@@ -47,14 +67,12 @@ final class MainWindow {
 		frame.setResizable(false);
 
 		final Font font = new Font(Font.MONOSPACED, Font.PLAIN, 12);
-		final Border outsideBorder = BorderFactory.createLineBorder(Color.BLACK);
 
-		final Border insideBorderTextField = BorderFactory.createEmptyBorder(0, 5, 0, 0);
-		textFieldHour = TextField.get("hour", 10, 11, 86, 20, font, outsideBorder, insideBorderTextField);
+		textFieldHour = TextField.get("hour", 10, 11, 86, 20, font, getBorder(Color.BLACK, 0, 5, 0, 0));
 		frame.getContentPane().add(textFieldHour);
-		textFieldMinute = TextField.get("minute", 10, 42, 86, 20, font, outsideBorder, insideBorderTextField);
+		textFieldMinute = TextField.get("minute", 10, 42, 86, 20, font, getBorder(Color.BLACK, 0, 5, 0, 0));
 		frame.getContentPane().add(textFieldMinute);
-		textFieldSecond = TextField.get("second", 10, 73, 86, 20, font, outsideBorder, insideBorderTextField);
+		textFieldSecond = TextField.get("second", 10, 73, 86, 20, font, getBorder(Color.BLACK, 0, 5, 0, 0));
 		frame.getContentPane().add(textFieldSecond);
 
 		adjustButton = Button.get("ADJUST", 105, 11, 88, 82, font);
@@ -67,16 +85,20 @@ final class MainWindow {
 		errorLabel = Label.get(15, 104, 414, 14, font);
 		frame.getContentPane().add(errorLabel);
 
-		final Border insideBorderTextArea = BorderFactory.createEmptyBorder(5, 5, 5, 5);
-		textArea = TextArea.get("Please insert your timestamps here", 10, 129, 414, 321, font, outsideBorder,
-				insideBorderTextArea);
+		textArea = TextArea.get("Please insert your timestamps here", 10, 129, 414, 321, font,
+				getBorder(Color.BLACK, 5, 5, 5, 5));
 		frame.getContentPane().add(textArea);
 
 		frame.getContentPane().requestFocusInWindow();
 	}
 
+	Border getBorder(Color color, int a, int b, int x, int y) {
+		final Border outside = BorderFactory.createLineBorder(color);
+		final Border inside = BorderFactory.createEmptyBorder(a, b, x, y);
+		return BorderFactory.createCompoundBorder(outside, inside);
+	}
+
 	private void adjust() {
 		Executors.newSingleThreadExecutor().execute(TimestampAdjuster.get(this));
 	}
-
 }

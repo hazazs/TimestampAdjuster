@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import javax.swing.BorderFactory;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 
@@ -15,13 +14,12 @@ public final class TextField extends JTextField {
 		super(placeholder);
 	}
 
-	public static TextField get(String placeholder, int a, int b, int x, int y, Font font, Border outside,
-			Border inside) {
+	public static TextField get(String placeholder, int a, int b, int x, int y, Font font, Border border) {
 		TextField textField = new TextField(placeholder);
 		textField.setBounds(a, b, x, y);
 		textField.setFont(font);
 		textField.setForeground(Color.GRAY);
-		textField.setBorder(BorderFactory.createCompoundBorder(outside, inside));
+		textField.setBorder(border);
 		textField.addFocusListener(new FocusListener() {
 
 			@Override
