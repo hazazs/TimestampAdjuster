@@ -94,7 +94,8 @@ final class MainWindow {
 		errorLabel = new Label("", 15, 104, 414, 14, Color.RED);
 		frame.getContentPane().add(errorLabel);
 
-		textArea = TextArea.get("Please insert your timestamps here", 10, 129, 414, 321, getBorder(Color.BLACK, 5, 5, 5, 5), font);
+		textArea = TextArea.get("Please insert your timestamps here", 10, 129, 414, 321,
+				getBorder(Color.BLACK, 5, 5, 5, 5), font);
 		frame.getContentPane().add(textArea);
 
 		frame.getContentPane().requestFocusInWindow();
@@ -109,5 +110,5 @@ final class MainWindow {
 	private void adjust() {
 		Executors.newSingleThreadExecutor().execute(TimestampAdjuster.get(this));
 	}
-	
+
 }
