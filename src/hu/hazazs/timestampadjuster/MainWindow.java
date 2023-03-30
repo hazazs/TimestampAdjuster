@@ -23,23 +23,26 @@ final class MainWindow {
 	private static final String TITLE = "Timestamp Adjuster 1.0";
 
 	private JFrame frame;
-	private JTextField textFieldHour;
-	private JTextField textFieldMinute;
-	private JTextField textFieldSecond;
+	private JTextField hourTextField;
+	private JLabel hourLabel;
+	private JTextField minuteTextField;
+	private JLabel minuteLabel;
+	private JTextField secondTextField;
+	private JLabel secondLabel;
 	private JButton adjustButton;
 	private JLabel errorLabel;
 	private JTextArea textArea;
 
-	JTextField getTextFieldHour() {
-		return textFieldHour;
+	JTextField getHourTextField() {
+		return hourTextField;
 	}
 
-	JTextField getTextFieldMinute() {
-		return textFieldMinute;
+	JTextField getMinuteTextField() {
+		return minuteTextField;
 	}
 
-	JTextField getTextFieldSecond() {
-		return textFieldSecond;
+	JTextField getSecondTextfield() {
+		return secondTextField;
 	}
 
 	JLabel getErrorLabel() {
@@ -66,39 +69,45 @@ final class MainWindow {
 		frame.setBounds(100, 100, 450, 500);
 		frame.setResizable(false);
 
-		final Font font = new Font(Font.MONOSPACED, Font.PLAIN, 12);
+		Font font = new Font(Font.MONOSPACED, Font.PLAIN, 12);
 
-		textFieldHour = TextField.get("hour", 10, 11, 86, 20, font, getBorder(Color.BLACK, 0, 5, 0, 0));
-		frame.getContentPane().add(textFieldHour);
-		textFieldMinute = TextField.get("minute", 10, 42, 86, 20, font, getBorder(Color.BLACK, 0, 5, 0, 0));
-		frame.getContentPane().add(textFieldMinute);
-		textFieldSecond = TextField.get("second", 10, 73, 86, 20, font, getBorder(Color.BLACK, 0, 5, 0, 0));
-		frame.getContentPane().add(textFieldSecond);
+		hourTextField = new TextField(10, 11, 30, 20, getBorder(Color.BLACK, 0, 5, 0, 0), font);
+		frame.getContentPane().add(hourTextField);
+		minuteTextField = new TextField(10, 42, 30, 20, getBorder(Color.BLACK, 0, 5, 0, 0), font);
+		frame.getContentPane().add(minuteTextField);
+		secondTextField = new TextField(10, 73, 30, 20, getBorder(Color.BLACK, 0, 5, 0, 0), font);
+		frame.getContentPane().add(secondTextField);
 
-		adjustButton = Button.get("ADJUST", 105, 11, 88, 82, font);
+		adjustButton = new Button("ADJUST", 120, 11, 88, 82);
 		adjustButton.addActionListener(event -> {
 			frame.getContentPane().requestFocusInWindow();
 			adjust();
 		});
 		frame.getContentPane().add(adjustButton);
 
-		errorLabel = Label.get(15, 104, 414, 14, font);
+		hourLabel = new Label("hour(s)", 42, 10, 150, 20);
+		frame.getContentPane().add(hourLabel);
+		minuteLabel = new Label("minute(s)", 42, 41, 150, 20);
+		frame.getContentPane().add(minuteLabel);
+		secondLabel = new Label("second(s)", 42, 72, 150, 20);
+		frame.getContentPane().add(secondLabel);
+		errorLabel = new Label("", 15, 104, 414, 14, Color.RED);
 		frame.getContentPane().add(errorLabel);
 
-		textArea = TextArea.get("Please insert your timestamps here", 10, 129, 414, 321, font,
-				getBorder(Color.BLACK, 5, 5, 5, 5));
+		textArea = TextArea.get("Please insert your timestamps here", 10, 129, 414, 321, getBorder(Color.BLACK, 5, 5, 5, 5), font);
 		frame.getContentPane().add(textArea);
 
 		frame.getContentPane().requestFocusInWindow();
 	}
 
 	Border getBorder(Color color, int a, int b, int x, int y) {
-		final Border outside = BorderFactory.createLineBorder(color);
-		final Border inside = BorderFactory.createEmptyBorder(a, b, x, y);
+		Border outside = BorderFactory.createLineBorder(color);
+		Border inside = BorderFactory.createEmptyBorder(a, b, x, y);
 		return BorderFactory.createCompoundBorder(outside, inside);
 	}
 
 	private void adjust() {
 		Executors.newSingleThreadExecutor().execute(TimestampAdjuster.get(this));
 	}
+	
 }
