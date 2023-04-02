@@ -14,12 +14,12 @@ public final class TextArea extends JTextArea {
 		super(placeholder);
 	}
 
-	public static TextArea get(String placeholder, int a, int b, int x, int y, Font font, Border border) {
+	public static TextArea get(String placeholder, int a, int b, int x, int y, Border border, Font font) {
 		TextArea textArea = new TextArea(placeholder);
 		textArea.setBounds(a, b, x, y);
+		textArea.setBorder(border);
 		textArea.setFont(font);
 		textArea.setForeground(Color.GRAY);
-		textArea.setBorder(border);
 		textArea.addFocusListener(new FocusListener() {
 
 			@Override

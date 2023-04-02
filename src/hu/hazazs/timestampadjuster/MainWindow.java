@@ -71,11 +71,11 @@ final class MainWindow {
 
 		Font font = new Font(Font.MONOSPACED, Font.PLAIN, 12);
 
-		hourTextField = new TextField(10, 11, 30, 20, getBorder(Color.BLACK, 0, 5, 0, 0), font);
+		hourTextField = new TextField(10, 11, 30, 20, getBorder(Color.BLACK, 0, 0, 0, 5), font);
 		frame.getContentPane().add(hourTextField);
-		minuteTextField = new TextField(10, 42, 30, 20, getBorder(Color.BLACK, 0, 5, 0, 0), font);
+		minuteTextField = new TextField(10, 42, 30, 20, getBorder(Color.BLACK, 0, 0, 0, 5), font);
 		frame.getContentPane().add(minuteTextField);
-		secondTextField = new TextField(10, 73, 30, 20, getBorder(Color.BLACK, 0, 5, 0, 0), font);
+		secondTextField = new TextField(10, 73, 30, 20, getBorder(Color.BLACK, 0, 0, 0, 5), font);
 		frame.getContentPane().add(secondTextField);
 
 		adjustButton = new Button("ADJUST", 120, 11, 88, 82);

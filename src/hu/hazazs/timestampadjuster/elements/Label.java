@@ -1,22 +1,17 @@
 package hu.hazazs.timestampadjuster.elements;
 
 import java.awt.Color;
-import java.awt.Font;
 import javax.swing.JLabel;
 
 @SuppressWarnings("serial")
 public final class Label extends JLabel {
 
-	private Label() {
-
-	}
-
-	public static Label get(int a, int b, int x, int y, Font font) {
-		Label label = new Label();
-		label.setBounds(a, b, x, y);
-		label.setFont(font);
-		label.setForeground(Color.RED);
-		return label;
+	public Label(String text, int a, int b, int x, int y, Color... color) {
+		super(text);
+		this.setBounds(a, b, x, y);
+		if (color.length > 0) {
+			this.setForeground(color[0]);
+		}
 	}
 
 }
