@@ -3,9 +3,13 @@ package hu.hazazs.timestampadjuster;
 import java.awt.Color;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
+import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import javax.swing.BorderFactory;
 import javax.swing.JTextField;
 
 final class TimestampAdjuster implements Runnable {
@@ -27,66 +31,75 @@ final class TimestampAdjuster implements Runnable {
 	@Override
 	public void run() {
 		reset();
-		int hour = getValueFrom(mainWindow.getTextFieldHour(), "hour");
-		int minute = getValueFrom(mainWindow.getTextFieldMinute(), "minute");
-		int second = getValueFrom(mainWindow.getTextFieldSecond(), "second");
+		int hour = getValueFrom(mainWindow.getHourTextField());
+		int minute = getValueFrom(mainWindow.getMinuteTextField());
+		int second = getValueFrom(mainWindow.getSecondTextfield());
 		Map<LocalTime, String> timestamps = getTimestamps();
-		if (hour < 0 || minute < 0 || second < 0 || timestamps.keySet().isEmpty()) {
+		if (hour < 0 || minute < 0 || second < 0 || timestamps.isEmpty()) {
 			mainWindow.getErrorLabel().setText("Some of the input fields are invalid.");
 			return;
 		}
 		mainWindow.getTextArea().setText(adjust(hour, minute, second, timestamps));
 	}
-	
+
 	private void reset() {
-		mainWindow.getTextFieldHour().setBorder(mainWindow.getBorder(Color.BLACK, 0, 5, 0, 0));
-		mainWindow.getTextFieldMinute().setBorder(mainWindow.getBorder(Color.BLACK, 0, 5, 0, 0));
-		mainWindow.getTextFieldSecond().setBorder(mainWindow.getBorder(Color.BLACK, 0, 5, 0, 0));
+		mainWindow.getHourTextField().setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		mainWindow.getMinuteTextField().setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		mainWindow.getSecondTextfield().setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		mainWindow.getErrorLabel().setText("");
-		mainWindow.getTextArea().setBorder(mainWindow.getBorder(Color.BLACK, 5, 5, 5, 5));
+		mainWindow.getTextArea().setBorder(mainWindow.getBorder(Color.BLACK));
 	}
-	
-	private int getValueFrom(JTextField textField, String placeholder) {
+
+	private int getValueFrom(JTextField textField) {
 		String text = textField.getText();
-		if (placeholder.equals(text)) {
+		if (text.isEmpty()) {
 			return 0;
 		}
 		try {
 			int value = Integer.parseInt(text);
 			if (value < 0) {
-				textField.setBorder(mainWindow.getBorder(Color.RED, 0, 5, 0, 0));
+				textField.setBorder(BorderFactory.createLineBorder(Color.RED));
 			}
 			return value;
 		} catch (NumberFormatException exception) {
-			textField.setBorder(mainWindow.getBorder(Color.RED, 0, 5, 0, 0));
+			textField.setBorder(BorderFactory.createLineBorder(Color.RED));
 			return -1;
 		}
 	}
-	
+
 	private Map<LocalTime, String> getTimestamps() {
-		Map<LocalTime, String> timestamps = new LinkedHashMap<>();
 		String[] lines = mainWindow.getTextArea().getText().split("\n");
-		Arrays.stream(lines).forEach(line -> {
-			if (line.matches("\\d+:\\d{2}:\\d{2} - .+")) {
+		if (lines.length == 0) {
+			mainWindow.getTextArea().setBorder(mainWindow.getBorder(Color.RED));
+			return new LinkedHashMap<>();
+		}
+		Map<LocalTime, String> timestamps = new LinkedHashMap<>();
+		for (String line : lines) {
+			if (line.matches("\\d{1,2}:\\d{2}:\\d{2} - .+")) {
 				String[] parts = line.split(" - ");
-				LocalTime timestamp = LocalTime.parse(parts[0], DateTimeFormatter.ofPattern("H:mm:ss"));
+				LocalTime timestamp;
+				try {
+					timestamp = LocalTime.parse(parts[0], DateTimeFormatter.ofPattern("H:mm:ss"));
+				} catch (DateTimeParseException exception) {
+					mainWindow.getTextArea().setBorder(mainWindow.getBorder(Color.RED));
+					return new LinkedHashMap<>();
+				}
 				timestamps.put(timestamp, parts[1]);
 			} else {
-				timestamps.clear();
-				mainWindow.getTextArea().setBorder(mainWindow.getBorder(Color.RED, 5, 5, 5, 5));
-				return;
+				mainWindow.getTextArea().setBorder(mainWindow.getBorder(Color.RED));
+				return new LinkedHashMap<>();
 			}
-		});
+		}
 		return timestamps;
 	}
-	
+
 	private String adjust(int hour, int minute, int second, Map<LocalTime, String> timestamps) {
-		StringBuilder builder = new StringBuilder();
+		List<String> lines = new ArrayList<>();
 		timestamps.forEach((key, value) -> {
 			LocalTime adjusted = key.plusHours(hour).plusMinutes(minute).plusSeconds(second);
-			builder.append(adjusted.format(DateTimeFormatter.ofPattern("H:mm:ss"))).append(" - ").append(value).append("\n");
+			lines.add(adjusted.format(DateTimeFormatter.ofPattern("H:mm:ss")) + " - " + value);
 		});
-		return builder.toString();
+		return lines.stream().collect(Collectors.joining("\n"));
 	}
 
 }
