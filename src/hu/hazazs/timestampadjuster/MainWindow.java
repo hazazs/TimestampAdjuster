@@ -71,11 +71,11 @@ final class MainWindow {
 
 		Font font = new Font(Font.MONOSPACED, Font.PLAIN, 12);
 
-		hourTextField = new TextField(10, 11, 30, 20, getBorder(Color.BLACK, 0, 0, 0, 5), font);
+		hourTextField = new TextField(10, 11, 30, 20, BorderFactory.createLineBorder(Color.BLACK), font);
 		frame.getContentPane().add(hourTextField);
-		minuteTextField = new TextField(10, 42, 30, 20, getBorder(Color.BLACK, 0, 0, 0, 5), font);
+		minuteTextField = new TextField(10, 42, 30, 20, BorderFactory.createLineBorder(Color.BLACK), font);
 		frame.getContentPane().add(minuteTextField);
-		secondTextField = new TextField(10, 73, 30, 20, getBorder(Color.BLACK, 0, 0, 0, 5), font);
+		secondTextField = new TextField(10, 73, 30, 20, BorderFactory.createLineBorder(Color.BLACK), font);
 		frame.getContentPane().add(secondTextField);
 
 		adjustButton = new Button("ADJUST", 120, 11, 88, 82);
@@ -95,15 +95,15 @@ final class MainWindow {
 		frame.getContentPane().add(errorLabel);
 
 		textArea = TextArea.get("Please insert your timestamps here", 10, 129, 414, 321,
-				getBorder(Color.BLACK, 5, 5, 5, 5), font);
+				getBorder(Color.BLACK), font);
 		frame.getContentPane().add(textArea);
 
 		frame.getContentPane().requestFocusInWindow();
 	}
 
-	Border getBorder(Color color, int a, int b, int x, int y) {
+	Border getBorder(Color color) {
 		Border outside = BorderFactory.createLineBorder(color);
-		Border inside = BorderFactory.createEmptyBorder(a, b, x, y);
+		Border inside = BorderFactory.createEmptyBorder(5, 5, 5, 5);
 		return BorderFactory.createCompoundBorder(outside, inside);
 	}
 
