@@ -9,7 +9,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import javax.swing.BorderFactory;
 import javax.swing.JTextField;
 
 final class TimestampAdjuster implements Runnable {
@@ -35,18 +34,16 @@ final class TimestampAdjuster implements Runnable {
 		int minute = getValueFrom(mainWindow.getMinuteTextField());
 		int second = getValueFrom(mainWindow.getSecondTextfield());
 		Map<LocalTime, String> timestamps = getTimestamps();
-		if (hour < 0 || minute < 0 || second < 0 || timestamps.isEmpty()) {
-			mainWindow.getErrorLabel().setText("Some of the input fields are invalid.");
+		if (timestamps.isEmpty()) {
+			mainWindow.getErrorLabel().setVisible(true);
+			mainWindow.getTextArea().setBorder(mainWindow.getBorder(Color.RED));
 			return;
 		}
 		mainWindow.getTextArea().setText(adjust(hour, minute, second, timestamps));
 	}
 
 	private void reset() {
-		mainWindow.getHourTextField().setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		mainWindow.getMinuteTextField().setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		mainWindow.getSecondTextfield().setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		mainWindow.getErrorLabel().setText("");
+		mainWindow.getErrorLabel().setVisible(false);
 		mainWindow.getTextArea().setBorder(mainWindow.getBorder(Color.BLACK));
 	}
 
@@ -55,22 +52,12 @@ final class TimestampAdjuster implements Runnable {
 		if (text.isEmpty()) {
 			return 0;
 		}
-		try {
-			int value = Integer.parseInt(text);
-			if (value < 0) {
-				textField.setBorder(BorderFactory.createLineBorder(Color.RED));
-			}
-			return value;
-		} catch (NumberFormatException exception) {
-			textField.setBorder(BorderFactory.createLineBorder(Color.RED));
-			return -1;
-		}
+		return Integer.parseInt(text);
 	}
 
 	private Map<LocalTime, String> getTimestamps() {
 		String[] lines = mainWindow.getTextArea().getText().split("\n");
 		if (lines.length == 0) {
-			mainWindow.getTextArea().setBorder(mainWindow.getBorder(Color.RED));
 			return new LinkedHashMap<>();
 		}
 		Map<LocalTime, String> timestamps = new LinkedHashMap<>();
@@ -81,12 +68,10 @@ final class TimestampAdjuster implements Runnable {
 				try {
 					timestamp = LocalTime.parse(parts[0], DateTimeFormatter.ofPattern("H:mm:ss"));
 				} catch (DateTimeParseException exception) {
-					mainWindow.getTextArea().setBorder(mainWindow.getBorder(Color.RED));
 					return new LinkedHashMap<>();
 				}
 				timestamps.put(timestamp, parts[1]);
 			} else {
-				mainWindow.getTextArea().setBorder(mainWindow.getBorder(Color.RED));
 				return new LinkedHashMap<>();
 			}
 		}

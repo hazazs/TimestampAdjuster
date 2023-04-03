@@ -20,7 +20,7 @@ import hu.hazazs.timestampadjuster.elements.TextField;
 final class MainWindow {
 
 	private static final String ICON_PATH = "src/resources/timestamp.png";
-	private static final String TITLE = "Timestamp Adjuster 1.0";
+	private static final String TITLE = "Timestamp Adjuster 1.2";
 
 	private JFrame frame;
 	private JTextField hourTextField;
@@ -71,11 +71,11 @@ final class MainWindow {
 
 		Font font = new Font(Font.MONOSPACED, Font.PLAIN, 12);
 
-		hourTextField = new TextField(10, 11, 30, 20, BorderFactory.createLineBorder(Color.BLACK), font);
+		hourTextField = TextField.get(10, 11, 30, 20, BorderFactory.createLineBorder(Color.BLACK), font);
 		frame.getContentPane().add(hourTextField);
-		minuteTextField = new TextField(10, 42, 30, 20, BorderFactory.createLineBorder(Color.BLACK), font);
+		minuteTextField = TextField.get(10, 42, 30, 20, BorderFactory.createLineBorder(Color.BLACK), font);
 		frame.getContentPane().add(minuteTextField);
-		secondTextField = new TextField(10, 73, 30, 20, BorderFactory.createLineBorder(Color.BLACK), font);
+		secondTextField = TextField.get(10, 73, 30, 20, BorderFactory.createLineBorder(Color.BLACK), font);
 		frame.getContentPane().add(secondTextField);
 
 		adjustButton = new Button("ADJUST", 120, 11, 88, 82);
@@ -91,7 +91,7 @@ final class MainWindow {
 		frame.getContentPane().add(minuteLabel);
 		secondLabel = new Label("second(s)", 42, 72, 150, 20);
 		frame.getContentPane().add(secondLabel);
-		errorLabel = new Label("", 15, 104, 414, 14, Color.RED);
+		errorLabel = new Label("The syntax of your timestamps is not valid.", 15, 104, 414, 14, Color.RED);
 		frame.getContentPane().add(errorLabel);
 
 		textArea = TextArea.get("Please insert your timestamps here", 10, 129, 414, 321,
