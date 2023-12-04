@@ -11,5 +11,5 @@ jobs:
           java-version: '11'
           distribution: 'zulu'
       - run: mvn -v
-      - run: ls
+      - run: pwd
       - run: mvn clean package
